@@ -2,7 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useApiErrorHandler } from "../hooks/useToast";
 import toast from "react-hot-toast";
-
+import API from "../libs/axios";
 const AuthContext = createContext();
 
 function AuthContextProvider({ children }) {
@@ -15,14 +15,13 @@ function AuthContextProvider({ children }) {
     try {
       setLoading(true);
      
-      const response = await axios.get(
-        "http://localhost:5000/api/user/verify",
-        { withCredentials: true }
-      );
-
-      if (response.data.status === 200) {
-        setUser(response.data.user);
-      }
+      // const response = await axios.get(
+      //   "https://backend-1bee.onrender.com/api/user/verify",
+      //   { withCredentials: true }
+      // );
+const response= await API.get('/user/verify')
+      setUser(response.data.user);
+      
     } catch (err) {
       console.error("Token verification failed:", err);
       setUser(null);
@@ -35,16 +34,13 @@ function AuthContextProvider({ children }) {
    
     
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/user/login",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true }
-      );
+    
+      const response = await API.post('/user/login', {
+        email,
+        password,
+      });
 
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         toast.success(response.data.message);
         setUser(response.data.user);
         return true
@@ -61,9 +57,8 @@ function AuthContextProvider({ children }) {
   const logout = async () => {
 
     try {
-      await axios.get("http://localhost:5000/api/user/logout", {
-        withCredentials: true,
-      });
+    
+      await API.get('/user/logout')
       setUser(null)
     } catch (err) {
       console.log(err);

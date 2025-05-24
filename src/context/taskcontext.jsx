@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useState } from "react";
+import API from "../libs/axios";
 
 const TaskContext=createContext()
 
@@ -12,9 +13,8 @@ function TaskContextProvider({children}){
 
             setLoading( true)
             
-            const response =await axios.get('http://localhost:5000/api/task/gettasks',{
-                withCredentials:true
-            })
+           
+            const response =await API.get('/task/gettasks')
             console.log(response.status);
             if(response.status ===200){
                 setTask(response.data.tasks)
@@ -26,21 +26,17 @@ function TaskContextProvider({children}){
             throw err
         }
         finally{
-            setTimeout(() => {
-                setLoading(false)
-            },4000)
+            setLoading(false)
             
         }
     }
 
     const addtodo =async(title,description,)=>{
         try{
-            const response =await axios.post('http://localhost:5000/api/task/create',{
+           
+            const response= await API.post('/task/create',{
                 title,
-                description,
-                
-            },{
-                withCredentials:true
+                description
             })
 
             setTask(prevTasks => [...prevTasks, response.data.task])
@@ -53,11 +49,10 @@ function TaskContextProvider({children}){
     }
     const edittodo=async(id,title,description)=>{
         try{
-            const response=await axios.put(`http://localhost:5000/api/task/update/${id}`,{
+           
+            const response = await API.put(`/task/update/${id}`, {
                 title,
                 description
-            },{
-                withCredentials:true    
             })
             const updatedTask=response.data.task
             setTask(prevTasks => prevTasks.map(task => task._id === id ? updatedTask : task))
@@ -75,7 +70,7 @@ function TaskContextProvider({children}){
     }
     const deletetodo =async(id)=>{
         try{
-            const response=await axios.delete(`http://localhost:5000/api/task/delete/${id}`,{
+            const response=await axios.delete(`https://backend-1bee.onrender.com/api/task/delete/${id}`,{
                 withCredentials:true
             })
             setTask(prevTasks => prevTasks.filter(task => task._id !== id))
