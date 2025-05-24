@@ -4,7 +4,7 @@ import {  Outlet } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
 export default function Private() {
-  const { user, loading, verifyToken } = useAuth()
+  const { user, verifyToken } = useAuth()
   const navigate = useNavigate()
   console.log(user);
   
@@ -16,9 +16,7 @@ export default function Private() {
   }, [])
 
  
-  if (loading) {
-    return <div>Loading...</div>
-  }
+  
 
   if (!user) {
     return navigate('/login')
