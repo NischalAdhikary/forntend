@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { EllipsisVertical } from 'lucide-react';
-import Dropdown from './Dropdown';
+import Dropdown from './dropdown';
 
 export default function     Todocard({task,index}) {
   const list = [
