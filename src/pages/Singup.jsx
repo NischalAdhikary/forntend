@@ -3,7 +3,7 @@ import Input from '../components/Input'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import toast from 'react-hot-toast'
-
+import API from '../libs/axios'
 export default function Signup() {
     const [name,setName]=useState('')
     const [email,setEmail]=useState('')
@@ -26,12 +26,15 @@ export default function Signup() {
     const handleSubmit=async(e)=>{
         e.preventDefault();
         try{
-               const response=  await axios.post('http://localhost:5000/api/user/signup',{
-            name,email,password
-        },
-        {withCredentials:true}
 
-    )
+        const response=await API.post('/user/signup',{
+            name,
+            email,
+            password
+        })
+       
+
+    
     setName('')
     setEmail('')
     setPassword('')
